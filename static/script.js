@@ -1,140 +1,104 @@
 let scenarios = [];
-let filteredScenarios = [];
-let currentIndex = 0;
+let userAnswers = {}; // Stores { scenarioId: selectedOptionKey }
 let score = 0;
-let answered = false;
-let isMuted = false;
-let currentCategory = "All";
-let completedScenarios = {};
 
 document.addEventListener("DOMContentLoaded", () => {
     fetch('/api/scenarios')
         .then(res => res.json())
         .then(data => {
             scenarios = data;
-            filteredScenarios = data;
-            setupCategories();
-            renderScenario();
+            renderCardsGrid();
         });
 });
 
-function setupCategories() {
-    const categories = ["All", ...new Set(scenarios.map(s => s.category))];
-    const container = document.getElementById("categoryFilters");
-    container.innerHTML = categories.map(cat => `
-        <button onclick="filterCategory('${cat}')" class="px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition ${currentCategory === cat ? 'bg-teal-700 text-white shadow-sm' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">
-            ${cat}
-        </button>
-    `).join('');
+function renderCardsGrid() {
+    const grid = document.getElementById("scenariosGrid");
+    grid.innerHTML = scenarios.map(s => {
+        const cardTitleParts = s.card.split(":");
+        const cardNum = cardTitleParts[0];
+        const cardHeading = cardTitleParts[1] ? cardTitleParts[1].trim() : s.card;
+        const isAnswered = userAnswers[s.id] !== undefined;
+        const selectedKey = userAnswers[s.id];
+        const isCorrect = selectedKey === s.correct;
+
+        return `
+            <div class="bg-white rounded-2xl shadow-sm border border-stone-200/80 p-5 flex flex-col justify-between gap-4 transition hover:shadow-md">
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between border-b border-stone-100 pb-2.5">
+                        <span class="px-2.5 py-0.5 rounded-md bg-[#7A1C2E]/10 text-[#7A1C2E] text-xs font-bold uppercase tracking-wider">${cardNum}</span>
+                        <span class="text-[11px] font-medium text-stone-500 truncate max-w-[180px]">${s.category}</span>
+                    </div>
+
+                    <div>
+                        <h3 class="text-sm font-bold text-stone-800 mb-1.5">${cardHeading}</h3>
+                        <p class="text-xs text-stone-600 leading-relaxed bg-stone-50 p-3 rounded-xl border border-stone-100">${s.question}</p>
+                    </div>
+
+                    <div class="space-y-2 pt-1">
+                        <p class="text-[10px] font-bold uppercase tracking-wider text-stone-400">Choose best response:</p>
+                        <div class="grid gap-2">
+                            ${s.options.map(opt => {
+                                let btnStyle = "border-stone-200 bg-white hover:bg-stone-50 text-stone-700";
+                                let badgeStyle = "bg-stone-100 text-stone-600";
+                                
+                                if (isAnswered) {
+                                    if (opt.key === s.correct) {
+                                        btnStyle = "border-emerald-500 bg-emerald-50/70 text-emerald-900 font-medium";
+                                        badgeStyle = "bg-emerald-600 text-white";
+                                    } else if (opt.key === selectedKey && opt.key !== s.correct) {
+                                        btnStyle = "border-rose-300 bg-rose-50 text-rose-900";
+                                        badgeStyle = "bg-rose-500 text-white";
+                                    } else {
+                                        btnStyle = "border-stone-100 bg-stone-50 opacity-50 text-stone-400";
+                                    }
+                                }
+
+                                return `
+                                    <button 
+                                        ${isAnswered ? 'disabled' : ''}
+                                        onclick="handleAnswer(${s.id}, '${opt.key}')"
+                                        class="w-full text-left p-2.5 rounded-xl border text-xs transition flex items-start gap-2.5 ${btnStyle}"
+                                    >
+                                        <span class="w-5 h-5 rounded-md flex items-center justify-center text-[10px] font-bold shrink-0 ${badgeStyle}">
+                                            ${isAnswered && opt.key === s.correct ? '✓' : isAnswered && opt.key === selectedKey && opt.key !== s.correct ? '✕' : opt.key}
+                                        </span>
+                                        <span class="pt-0.5 leading-snug">${opt.text}</span>
+                                    </button>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                </div>
+
+                ${isAnswered ? `
+                    <div class="p-3 rounded-xl border text-xs space-y-1 animate-fadeIn ${isCorrect ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-amber-50 border-amber-200 text-amber-900'}">
+                        <p class="font-bold flex items-center gap-1">
+                            ${isCorrect ? '✅ Correct Choice!' : '⚠️ Correct Answer Highlighted Above.'}
+                        </p>
+                        <p class="text-[11px] leading-relaxed text-stone-700"><strong>Guidance:</strong> ${s.explanation}</p>
+                    </div>
+                ` : '<div class="text-[11px] text-stone-400 italic text-right">Click an option to test response</div>'}
+            </div>
+        `;
+    }).join('');
 }
 
-function filterCategory(cat) {
-    currentCategory = cat;
-    currentIndex = 0;
-    answered = false;
-    filteredScenarios = cat === "All" ? scenarios : scenarios.filter(s => s.category === cat);
-    setupCategories();
-    renderScenario();
-}
-
-function renderScenario() {
-    if (filteredScenarios.length === 0) return;
-    const s = filteredScenarios[currentIndex];
-
-    document.getElementById("cardBadge").innerText = s.card.split(":")[0];
-    document.getElementById("cardCategory").innerText = s.category;
-    document.getElementById("scenarioCounter").innerText = `Scenario ${currentIndex + 1} of ${filteredScenarios.length}`;
-    document.getElementById("cardTitle").innerText = s.card.split(":")[1];
-    document.getElementById("cardQuestion").innerText = s.question;
-    document.getElementById("totalScenarios").innerText = scenarios.length;
-
-    const optionsEl = document.getElementById("optionsContainer");
-    optionsEl.innerHTML = s.options.map(opt => `
-        <button id="opt-${opt.key}" onclick="selectOption('${opt.key}')" class="w-full text-left p-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 transition flex items-start gap-3.5">
-            <span class="w-7 h-7 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center text-xs font-bold shrink-0">${opt.key}</span>
-            <span class="text-sm sm:text-base pt-0.5">${opt.text}</span>
-        </button>
-    `).join('');
-
-    document.getElementById("explanationBox").classList.add("hidden");
-    document.getElementById("nextBtn").classList.add("hidden");
-    answered = false;
-
-    speak(s.question);
-}
-
-function selectOption(key) {
-    if (answered) return;
-    answered = true;
-    const s = filteredScenarios[currentIndex];
-    const isCorrect = key === s.correct;
-
-    if (isCorrect && !completedScenarios[s.id]) {
+function handleAnswer(scenarioId, optionKey) {
+    if (userAnswers[scenarioId] !== undefined) return;
+    
+    userAnswers[scenarioId] = optionKey;
+    const scenario = scenarios.find(s => s.id === scenarioId);
+    
+    if (optionKey === scenario.correct) {
         score++;
-        completedScenarios[s.id] = true;
         document.getElementById("scoreDisplay").innerText = score;
     }
 
-    s.options.forEach(opt => {
-        const btn = document.getElementById(`opt-${opt.key}`);
-        btn.disabled = true;
-        const badge = btn.querySelector('span');
-        if (opt.key === s.correct) {
-            btn.className = "w-full text-left p-4 rounded-xl border border-emerald-500 bg-emerald-50/60 text-emerald-900 font-medium ring-1 ring-emerald-400 transition flex items-start gap-3.5";
-            badge.className = "w-7 h-7 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-xs font-bold shrink-0";
-            badge.innerHTML = "✓";
-        } else if (opt.key === key && !isCorrect) {
-            btn.className = "w-full text-left p-4 rounded-xl border border-rose-300 bg-rose-50 text-rose-900 transition flex items-start gap-3.5";
-            badge.className = "w-7 h-7 rounded-lg bg-rose-500 text-white flex items-center justify-center text-xs font-bold shrink-0";
-            badge.innerHTML = "✕";
-        } else {
-            btn.className = "w-full text-left p-4 rounded-xl border border-slate-100 bg-slate-50 opacity-60 text-slate-500 transition flex items-start gap-3.5";
-        }
-    });
-
-    const expBox = document.getElementById("explanationBox");
-    const expHeader = document.getElementById("explanationHeader");
-    expBox.classList.remove("hidden");
-    expBox.className = `p-5 rounded-xl border animate-fadeIn space-y-2 ${isCorrect ? 'bg-emerald-50/80 border-emerald-200 text-emerald-900' : 'bg-amber-50/80 border-amber-200 text-amber-900'}`;
-    
-    expHeader.innerHTML = isCorrect ? '✅ Correct Choice! Well Done.' : '⚠️ Not quite. The correct answer is highlighted above.';
-    document.getElementById("explanationText").innerText = s.explanation;
-    document.getElementById("nextBtn").classList.remove("hidden");
-}
-
-function nextScenario() {
-    if (currentIndex < filteredScenarios.length - 1) {
-        currentIndex++;
-    } else {
-        currentIndex = 0;
-    }
-    renderScenario();
-}
-
-function resetQuiz() {
-    currentIndex = 0;
-    score = 0;
-    completedScenarios = {};
-    document.getElementById("scoreDisplay").innerText = score;
-    renderScenario();
+    renderCardsGrid();
 }
 
 function toggleDirectory(show) {
     const modal = document.getElementById("directoryModal");
     if (show) modal.classList.remove("hidden");
     else modal.classList.add("hidden");
-}
-
-function toggleMute() {
-    isMuted = !isMuted;
-    document.getElementById("muteBtn").innerText = isMuted ? "🔇" : "🔊";
-    if (isMuted && 'speechSynthesis' in window) window.speechSynthesis.cancel();
-}
-
-function speak(text) {
-    if (isMuted || !('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 0.95;
-    window.speechSynthesis.speak(utterance);
 }
