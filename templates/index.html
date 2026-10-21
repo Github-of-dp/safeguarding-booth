@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safeguarding & Student Mental Health Awareness Booth | Dunes International School</title>
+    <!-- Tailwind CSS CDN for gorgeous styling without node build errors -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="bg-[#F4F7F6] text-[#2C3E50] min-h-screen flex flex-col font-sans">
+    
+    <!-- Top Header -->
+    <header class="bg-white border-b border-emerald-100 sticky top-0 z-30 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center shadow-inner font-bold text-lg">🛡️</div>
+                <div>
+                    <h1 class="text-base sm:text-lg font-bold text-slate-800 leading-tight">Dunes International School</h1>
+                    <p class="text-xs text-teal-700 font-medium">Safeguarding & Student Mental Health Awareness Booth</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <button onclick="toggleDirectory(true)" class="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-semibold rounded-lg transition border border-emerald-200">
+                    📞 Who Can Help My Child?
+                </button>
+                <button id="muteBtn" onclick="toggleMute()" class="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 transition" title="Toggle Voice">
+                    🔊
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-1 max-w-4xl w-full mx-auto px-4 py-6 flex flex-col gap-6">
+        
+        <!-- Hero Banner -->
+        <div class="bg-gradient-to-br from-teal-500 to-emerald-600 rounded-2xl p-6 text-white shadow-md relative overflow-hidden">
+            <div class="relative z-10 max-w-2xl">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 text-white text-xs font-medium mb-3 backdrop-blur-sm">
+                    ✨ Student-Led Conference • Oct 2026
+                </span>
+                <h2 class="text-xl sm:text-2xl font-bold mb-2">Interactive Parent Scenario Cards</h2>
+                <p class="text-teal-50 text-xs sm:text-sm leading-relaxed">
+                    Explore everyday situations, test your response strategies, and learn recommended safeguarding practices to partner with us in keeping every child safe, heard, and supported.
+                </p>
+            </div>
+        </div>
+
+        <!-- Filter & Score Bar -->
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-4 rounded-xl shadow-sm border border-slate-100">
+            <div id="categoryFilters" class="flex items-center gap-2 overflow-x-auto w-full pb-2 sm:pb-0">
+                <!-- Filters injected via JS -->
+            </div>
+            <div class="flex items-center gap-3 self-end sm:self-center">
+                <span class="text-xs font-semibold text-slate-500">
+                    Score: <strong id="scoreDisplay" class="text-teal-700">0</strong> / <span id="totalScenarios">10</span>
+                </span>
+                <button onclick="resetQuiz()" class="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg bg-slate-50 hover:bg-slate-100 transition" title="Reset Progress">
+                    🔄
+                </button>
+            </div>
+        </div>
+
+        <!-- Scenario Card Box -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 sm:p-8 flex flex-col gap-6 relative">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-4">
+                <div class="flex items-center gap-2">
+                    <span id="cardBadge" class="px-2.5 py-1 rounded-md bg-teal-50 text-teal-800 text-xs font-bold uppercase tracking-wider">Card 1</span>
+                    <span class="text-xs text-slate-400">|</span>
+                    <span id="cardCategory" class="text-xs font-medium text-slate-600">Category</span>
+                </div>
+                <span id="scenarioCounter" class="text-xs font-semibold text-slate-400">Scenario 1 of 10</span>
+            </div>
+
+            <div class="space-y-2">
+                <h3 id="cardTitle" class="text-base sm:text-lg font-bold text-slate-800">Title</h3>
+                <p id="cardQuestion" class="text-sm sm:text-base text-slate-600 leading-relaxed bg-slate-50/70 p-4 rounded-xl border border-slate-100">Question...</p>
+            </div>
+
+            <div class="space-y-3">
+                <p class="text-xs font-bold uppercase tracking-wider text-slate-400">Choose the best appropriate response:</p>
+                <div id="optionsContainer" class="grid gap-3">
+                    <!-- Options injected via JS -->
+                </div>
+            </div>
+
+            <!-- Explanation Box -->
+            <div id="explanationBox" class="hidden p-5 rounded-xl border space-y-2 transition-all">
+                <div id="explanationHeader" class="flex items-center gap-2 font-bold text-sm">Header</div>
+                <p class="text-xs sm:text-sm leading-relaxed">
+                    <strong class="font-semibold">Recommended Guidance:</strong> <span id="explanationText">Text...</span>
+                </p>
+            </div>
+
+            <div class="flex items-center justify-between pt-4 border-t border-slate-100">
+                <span class="text-xs text-slate-400">Booth Representatives: Anti-Bullying Student Leaders</span>
+                <button id="nextBtn" onclick="nextScenario()" class="hidden px-5 py-2.5 bg-teal-700 hover:bg-teal-800 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-sm transition flex items-center gap-2">
+                    Next Scenario ➔
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Support Directory Modal -->
+    <div id="directoryModal" class="hidden fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-teal-50 text-teal-700 flex items-center justify-center font-bold">❤️</div>
+                    <h3 class="font-bold text-slate-800 text-base">Who Can Help My Child?</h3>
+                </div>
+                <button onclick="toggleDirectory(false)" class="p-1.5 rounded-lg text-slate-400 hover:bg-slate-100 transition">✕</button>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">Dunes International School provides a dedicated network of staff and support teams available throughout the academic year:</p>
+            <div class="space-y-3">
+                <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
+                    <h4 class="text-xs font-bold text-teal-800 uppercase">Safeguarding & Child Protection Lead</h4>
+                    <p class="text-xs text-slate-600">Contact for safety concerns, bullying reports, or immediate protection inquiries.</p>
+                </div>
+                <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
+                    <h4 class="text-xs font-bold text-teal-800 uppercase">School Counsellor</h4>
+                    <p class="text-xs text-slate-600">Contact for emotional wellbeing, mental health support, stress management, and behavioral guidance.</p>
+                </div>
+                <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
+                    <h4 class="text-xs font-bold text-teal-800 uppercase">Class Teachers & Supervisors</h4>
+                    <p class="text-xs text-slate-600">First point of contact for daily classroom progress, peer interactions, and academic support.</p>
+                </div>
+                <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
+                    <h4 class="text-xs font-bold text-teal-800 uppercase">Student Anti-Bullying Leaders & Prefects</h4>
+                    <p class="text-xs text-slate-600">Guiding parents through awareness booths, peer mentorship, and reporting channels.</p>
+                </div>
+            </div>
+            <button onclick="toggleDirectory(false)" class="w-full py-2.5 bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold rounded-xl transition">Close Directory</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-100 py-4 mt-8 text-center text-xs text-slate-400">
+        <p>Dunes International School • Academic Session 2026-2027 • Safeguarding & Student Mental Health Awareness Booth</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
