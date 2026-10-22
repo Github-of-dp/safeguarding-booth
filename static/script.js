@@ -1,5 +1,5 @@
 let scenarios = [];
-let userAnswers = {}; // stores { scenarioId: selectedOptionKey }
+let userAnswers = {};
 let score = 0;
 let activeScenarioId = null;
 
@@ -11,6 +11,25 @@ document.addEventListener("DOMContentLoaded", () => {
             renderCardsGrid();
         });
 });
+
+function switchTab(tab) {
+    const infoSec = document.getElementById("sectionInfo");
+    const scenariosSec = document.getElementById("sectionScenarios");
+    const infoBtn = document.getElementById("tabInfoBtn");
+    const scenariosBtn = document.getElementById("tabScenariosBtn");
+
+    if (tab === 'info') {
+        infoSec.classList.remove("hidden");
+        scenariosSec.classList.add("hidden");
+        infoBtn.className = "py-3.5 px-4 font-bold text-sm sm:text-base border-b-2 border-[#7A1C2E] text-[#7A1C2E] transition flex items-center gap-2";
+        scenariosBtn.className = "py-3.5 px-4 font-semibold text-sm sm:text-base border-b-2 border-transparent text-stone-500 hover:text-[#7A1C2E] transition flex items-center gap-2";
+    } else {
+        infoSec.classList.add("hidden");
+        scenariosSec.classList.remove("hidden");
+        scenariosBtn.className = "py-3.5 px-4 font-bold text-sm sm:text-base border-b-2 border-[#7A1C2E] text-[#7A1C2E] transition flex items-center gap-2";
+        infoBtn.className = "py-3.5 px-4 font-semibold text-sm sm:text-base border-b-2 border-transparent text-stone-500 hover:text-[#7A1C2E] transition flex items-center gap-2";
+    }
+}
 
 function renderCardsGrid() {
     const grid = document.getElementById("scenariosGrid");
@@ -71,7 +90,7 @@ function renderModalOptions() {
 
     const optionsEl = document.getElementById("modalOptions");
     optionsEl.innerHTML = s.options.map(opt => {
-        let btnStyle = "border-stone-200 bg-white hover:bg-stone-50 text-stone-700";
+        let btnStyle = "border-stone-200 bg-white hover:bg-slate-50 text-stone-700";
         let badgeStyle = "bg-stone-100 text-stone-700";
 
         if (isAnswered) {
@@ -123,7 +142,7 @@ function handleModalAnswer(optionKey) {
 
     if (optionKey === s.correct) {
         score++;
-        document.getElementById("scoreDisplay").innerText = score;
+        document.getElementById("scoreBadge").innerText = `${score}/10`;
     }
 
     renderModalOptions();
@@ -138,7 +157,7 @@ function closeModal() {
 function resetProgress() {
     userAnswers = {};
     score = 0;
-    document.getElementById("scoreDisplay").innerText = score;
+    document.getElementById("scoreBadge").innerText = `0/10`;
     renderCardsGrid();
 }
 

@@ -42,9 +42,7 @@ SCENARIOS_DATA = [
             {"key": "A", "text": "Tell your child to fight back."},
             {
                 "key": "B",
-                "text": (
-                    "Ignore it because children will sort it out."
-                ),
+                "text": "Ignore it because children will sort it out.",
             },
             {
                 "key": "C",
@@ -133,9 +131,7 @@ SCENARIOS_DATA = [
         "options": [
             {
                 "key": "A",
-                "text": (
-                    "Compare your child with higher-performing students."
-                ),
+                "text": "Compare your child with higher-performing students.",
             },
             {
                 "key": "B",
@@ -221,9 +217,7 @@ SCENARIOS_DATA = [
         "options": [
             {
                 "key": "A",
-                "text": (
-                    "Blame the teacher or other children immediately."
-                ),
+                "text": "Blame the teacher or other children immediately.",
             },
             {
                 "key": "B",

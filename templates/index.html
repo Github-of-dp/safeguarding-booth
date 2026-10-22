@@ -21,15 +21,24 @@
                 </div>
             </div>
             <div class="flex items-center gap-3">
-                <button onclick="resetProgress()" class="px-4 py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs sm:text-sm font-semibold rounded-xl transition border border-stone-200 flex items-center gap-1.5">
-                    🔄 Reset Progress
-                </button>
                 <button onclick="toggleDirectory(true)" class="px-4 py-2 bg-[#7A1C2E] hover:bg-[#611222] text-white text-xs sm:text-sm font-semibold rounded-xl transition shadow-sm">
                     📞 Who Can Help My Child?
                 </button>
             </div>
         </div>
     </header>
+
+    <!-- Navigation Tabs Bar -->
+    <nav class="bg-white border-b border-[#E6D7C3] shadow-inner">
+        <div class="max-w-7xl mx-auto px-6 flex space-x-6">
+            <button onclick="switchTab('info')" id="tabInfoBtn" class="py-3.5 px-4 font-bold text-sm sm:text-base border-b-2 border-[#7A1C2E] text-[#7A1C2E] transition flex items-center gap-2">
+                📖 Parent Information Center (Guides & Resources)
+            </button>
+            <button onclick="switchTab('scenarios')" id="tabScenariosBtn" class="py-3.5 px-4 font-semibold text-sm sm:text-base border-b-2 border-transparent text-stone-500 hover:text-[#7A1C2E] transition flex items-center gap-2">
+                🎯 Interactive Scenario Cards (<span id="scoreBadge">0/10</span>)
+            </button>
+        </div>
+    </nav>
 
     <!-- Main Container -->
     <main class="flex-1 max-w-7xl w-full mx-auto px-6 py-8 flex flex-col gap-8">
@@ -40,21 +49,161 @@
                 <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/20 text-white text-xs sm:text-sm font-medium backdrop-blur-sm">
                     ✨ Student-Led Conference • Oct 2026
                 </span>
-                <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight">Interactive Parent Scenario Cards</h2>
+                <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight">Safeguarding & Mental Health Hub</h2>
                 <p class="text-amber-100 text-sm sm:text-base leading-relaxed">
-                    Click on any scenario card below to open it, test your response strategies, and learn recommended safeguarding practices to partner with us in keeping every child safe, heard, and supported.
+                    Explore expert guidance, developmental warning signs, self-care tips for parents, and test your response strategies using our interactive scenario cards.
                 </p>
             </div>
             <div class="bg-white/10 p-6 rounded-2xl backdrop-blur-md border border-white/20 text-center shrink-0 min-w-[160px]">
-                <span class="block text-xs uppercase tracking-wider text-amber-200 font-bold mb-1">Total Score</span>
-                <span id="scoreDisplay" class="text-4xl font-extrabold text-white">0</span>
-                <span class="text-xs text-amber-200 block mt-1">/ 10 Solved Correctly</span>
+                <span class="block text-xs uppercase tracking-wider text-amber-200 font-bold mb-1">Booth Status</span>
+                <span class="text-xl font-extrabold text-white">Active</span>
+                <span class="text-xs text-amber-200 block mt-1">DIS Student Leaders</span>
             </div>
         </div>
 
-        <!-- Larger 3-Column Grid for All 10 Scenarios -->
-        <div id="scenariosGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Cards injected via JS -->
+        <!-- TAB 1: INFORMATION CENTER (PDF Content Integrated) -->
+        <div id="sectionInfo" class="space-y-8 animate-fadeIn">
+            
+            <!-- Section 1: Core Definitions & Safeguarding -->
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-stone-200/90 space-y-4">
+                <h3 class="text-xl font-bold text-[#7A1C2E] flex items-center gap-2">🛡️ 1. Understanding Safeguarding & Child Protection</h3>
+                <p class="text-stone-600 text-sm leading-relaxed">
+                    <strong>Safeguarding</strong> is the everyday work of protecting children's safety, welfare, and wellbeing. <strong>Child protection</strong> is the response when there is a concern that a child may be experiencing harm or neglect[cite: 52]. In both, the child's safety and best interests come first[cite: 52].
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                    <div class="bg-stone-50 p-4 rounded-2xl border border-stone-100 space-y-2">
+                        <h4 class="font-bold text-stone-800 text-xs uppercase tracking-wide text-[#7A1C2E]">Everyday Safeguarding Pillars</h4>
+                        <ul class="text-xs text-stone-600 space-y-1.5 list-disc pl-4">
+                            <li>Safe supervision and collection routines[cite: 52]</li>
+                            <li>Respectful relationships[cite: 52]</li>
+                            <li>Healthy wellbeing routines[cite: 52]</li>
+                            <li>Online safety and privacy[cite: 52]</li>
+                        </ul>
+                    </div>
+                    <div class="bg-stone-50 p-4 rounded-2xl border border-stone-100 space-y-2">
+                        <h4 class="font-bold text-stone-800 text-xs uppercase tracking-wide text-[#7A1C2E]">Key Action Response</h4>
+                        <ul class="text-xs text-stone-600 space-y-1.5 list-disc pl-4">
+                            <li>Listen without judgement to the child[cite: 52, 54]</li>
+                            <li>Record facts and exact words accurately[cite: 52, 54]</li>
+                            <li>Report concerns promptly to school leads[cite: 52, 54]</li>
+                            <li>Seek protection and specialist help[cite: 52]</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Recognising Warning Signs Across Ages -->
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-stone-200/90 space-y-4">
+                <h3 class="text-xl font-bold text-[#7A1C2E] flex items-center gap-2">👁️ 2. Signs of Concern vs. Typical Behavior</h3>
+                <p class="text-stone-600 text-sm leading-relaxed">
+                    Children often struggle to express difficult emotions directly[cite: 19]. Parents should monitor gradual or sudden behavioral shifts, sleep/eating habits, and physical health symptoms[cite: 20].
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                    <div class="bg-amber-50/50 p-4 rounded-2xl border border-amber-200/60 space-y-2">
+                        <h4 class="font-bold text-amber-900 text-xs uppercase">Early Childhood (Infancy - 3 yrs)</h4>
+                        <p class="text-xs text-stone-600 leading-relaxed"><strong>Signs for concern:</strong> Frequent/intense temper tantrums, difficulty soothing themselves, poor responsiveness to communication cues, or repetitive behaviors[cite: 23].</p>
+                    </div>
+                    <div class="bg-teal-50/50 p-4 rounded-2xl border border-teal-200/60 space-y-2">
+                        <h4 class="font-bold text-teal-900 text-xs uppercase">Childhood (3 - 9 yrs)</h4>
+                        <p class="text-xs text-stone-600 leading-relaxed"><strong>Signs for concern:</strong> Excessive general worries, unexplained drop in school performance, social withdrawal, persistent sadness, or separation anxiety[cite: 24].</p>
+                    </div>
+                    <div class="bg-rose-50/50 p-4 rounded-2xl border border-rose-200/60 space-y-2">
+                        <h4 class="font-bold text-rose-900 text-xs uppercase">Adolescence (10 - 18 yrs)</h4>
+                        <p class="text-xs text-stone-600 leading-relaxed"><strong>Signs for concern:</strong> Persistent sadness or fatigue, suicidal ideation expressions, risky behaviors or self-harm, and drastic weight/sleep changes[cite: 25].</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Common Mental Health Disorders in Children -->
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-stone-200/90 space-y-4">
+                <h3 class="text-xl font-bold text-[#7A1C2E] flex items-center gap-2">🧠 3. Common Mental Health Conditions</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="p-4 rounded-2xl bg-stone-50 border border-stone-100 space-y-1.5">
+                        <h4 class="text-xs font-bold text-[#7A1C2E] uppercase">ADHD (Attention Deficit Hyperactivity Disorder)</h4>
+                        <p class="text-xs text-stone-600 leading-relaxed">Difficulties maintaining attention, impulse regulation, and restlessness. Forgets tasks or speaks out of turn[cite: 27].</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-stone-50 border border-stone-100 space-y-1.5">
+                        <h4 class="text-xs font-bold text-[#7A1C2E] uppercase">Anxiety Related Disorders</h4>
+                        <p class="text-xs text-stone-600 leading-relaxed">School refusal, fear of parental separation, physical pains without medical cause, and public mutism[cite: 29].</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-stone-50 border border-stone-100 space-y-1.5">
+                        <h4 class="text-xs font-bold text-[#7A1C2E] uppercase">Mood Related & Eating Disorders</h4>
+                        <p class="text-xs text-stone-600 leading-relaxed">Persistent anger outbursts, isolation, sudden weight changes, strict portion restriction, and calorie obsession[cite: 30, 33].</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-stone-50 border border-stone-100 space-y-1.5">
+                        <h4 class="text-xs font-bold text-[#7A1C2E] uppercase">Bullying & Maltreatment</h4>
+                        <p class="text-xs text-stone-600 leading-relaxed">Repeated physical or verbal aggression by peers. Notice sudden school refusal or avoidance of enjoyed activities[cite: 32].</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 4: Talking to Your Child (Do's & Don'ts) -->
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-stone-200/90 space-y-4">
+                <h3 class="text-xl font-bold text-[#7A1C2E] flex items-center gap-2">💬 4. How to Talk to Your Child About Mental Health</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-emerald-50/60 p-5 rounded-2xl border border-emerald-200 space-y-3">
+                        <h4 class="text-xs font-bold text-emerald-900 uppercase tracking-wide">🟢 DO'S</h4>
+                        <ul class="text-xs text-emerald-950 space-y-2 list-disc pl-4">
+                            <li><strong>Build positive conversations:</strong> Talk regularly, not just when things feel wrong[cite: 34].</li>
+                            <li><strong>Model healthy behavior:</strong> Show that vulnerability and stress are normal[cite: 34].</li>
+                            <li><strong>Create a safe environment:</strong> Private spaces with no threat of punishment[cite: 34].</li>
+                            <li><strong>Listen actively:</strong> Put away phones and let the child express fully[cite: 34].</li>
+                        </ul>
+                    </div>
+                    <div class="bg-rose-50/60 p-5 rounded-2xl border border-rose-200 space-y-3">
+                        <h4 class="text-xs font-bold text-rose-900 uppercase tracking-wide">🔴 DON'TS</h4>
+                        <ul class="text-xs text-rose-950 space-y-2 list-disc pl-4">
+                            <li><strong>Don't view mental health as weakness:</strong> Remove stigma by being supportive[cite: 35].</li>
+                            <li><strong>Avoid advice or comparisons:</strong> Don't compare with siblings or say "I went through worse"[cite: 35].</li>
+                            <li><strong>Don't blame yourself:</strong> Guilt makes it harder to support your child[cite: 35].</li>
+                            <li><strong>Never promise secrecy</strong> regarding safety or abuse[cite: 54].</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 5: Parent Self-Care -->
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-stone-200/90 space-y-4">
+                <h3 class="text-xl font-bold text-[#7A1C2E] flex items-center gap-2">🌱 5. Self-Care Tips for Parents</h3>
+                <p class="text-stone-600 text-sm leading-relaxed">
+                    Parenting a child through difficulties is demanding[cite: 43]. Prioritizing your own wellbeing is essential to ensure you have the energy to support your child[cite: 43].
+                </p>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs text-stone-700">
+                    <div class="bg-stone-50 p-4 rounded-2xl border border-stone-100 space-y-1">
+                        <strong class="text-[#7A1C2E] block mb-1">Manage Stress Limits</strong>
+                        Be mindful of your own stress thresholds and identify primary triggers[cite: 43].
+                    </div>
+                    <div class="bg-stone-50 p-4 rounded-2xl border border-stone-100 space-y-1">
+                        <strong class="text-[#7A1C2E] block mb-1">Health & Hobbies</strong>
+                        Set aside time each week for meditation, exercise, or hobbies and protect sleep[cite: 44].
+                    </div>
+                    <div class="bg-stone-50 p-4 rounded-2xl border border-stone-100 space-y-1">
+                        <strong class="text-[#7A1C2E] block mb-1">Stay Connected</strong>
+                        Avoid isolating yourself; reach out to family, friends, or professionals for support[cite: 44].
+                    </div>
+                </div>
+            </div>
+
+            <!-- Call to Action to Scenarios -->
+            <div class="text-center py-6">
+                <button onclick="switchTab('scenarios')" class="px-8 py-4 bg-[#7A1C2E] hover:bg-[#611222] text-white font-bold rounded-2xl shadow-md transition text-base">
+                    Ready to Test Your Knowledge? Open Interactive Scenario Cards ➔
+                </button>
+            </div>
+        </div>
+
+        <!-- TAB 2: INTERACTIVE SCENARIOS GRID -->
+        <div id="sectionScenarios" class="hidden space-y-6 animate-fadeIn">
+            <div class="flex items-center justify-between">
+                <h3 class="text-xl font-bold text-[#7A1C2E]">Interactive Parent Practice Cards</h3>
+                <button onclick="resetProgress()" class="px-4 py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-semibold rounded-xl transition border border-stone-200 flex items-center gap-1.5">
+                    🔄 Reset Progress
+                </button>
+            </div>
+            
+            <div id="scenariosGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Cards injected via JS -->
+            </div>
         </div>
 
     </main>
@@ -107,23 +256,19 @@
                 </div>
                 <button onclick="toggleDirectory(false)" class="p-2 rounded-xl text-stone-400 hover:bg-stone-100 transition">✕</button>
             </div>
-            <p class="text-xs sm:text-sm text-stone-600 leading-relaxed">Dunes International School provides a dedicated network of staff and support teams available throughout the academic year:</p>
+            <p class="text-xs sm:text-sm text-stone-600 leading-relaxed">Dunes International School & UAE support network available throughout the academic year:</p>
             <div class="space-y-3">
                 <div class="p-4 rounded-2xl bg-stone-50 border border-stone-100 space-y-1">
-                    <h4 class="text-xs sm:text-sm font-bold text-[#7A1C2E] uppercase">Safeguarding & Child Protection Lead</h4>
-                    <p class="text-xs text-stone-600">Contact for safety concerns, bullying reports, or immediate protection inquiries.</p>
+                    <h4 class="text-xs sm:text-sm font-bold text-[#7A1C2E] uppercase">Emergency & Child Protection</h4>
+                    <p class="text-xs text-stone-600">Police: <strong>999</strong>[cite: 56] | MOL Child Protection Centre: <strong>116111</strong>[cite: 56]</p>
                 </div>
                 <div class="p-4 rounded-2xl bg-stone-50 border border-stone-100 space-y-1">
-                    <h4 class="text-xs sm:text-sm font-bold text-[#7A1C2E] uppercase">School Counsellor</h4>
-                    <p class="text-xs text-stone-600">Contact for emotional wellbeing, mental health support, stress management, and behavioral guidance.</p>
+                    <h4 class="text-xs sm:text-sm font-bold text-[#7A1C2E] uppercase">Dunes International School Contact</h4>
+                    <p class="text-xs text-stone-600">Email: info@dunesinternationalschool.com[cite: 56] | Phone: 025527527[cite: 56]</p>
                 </div>
                 <div class="p-4 rounded-2xl bg-stone-50 border border-stone-100 space-y-1">
-                    <h4 class="text-xs sm:text-sm font-bold text-[#7A1C2E] uppercase">Class Teachers & Supervisors</h4>
-                    <p class="text-xs text-stone-600">First point of contact for daily classroom progress, peer interactions, and academic support.</p>
-                </div>
-                <div class="p-4 rounded-2xl bg-stone-50 border border-stone-100 space-y-1">
-                    <h4 class="text-xs sm:text-sm font-bold text-[#7A1C2E] uppercase">Student Anti-Bullying Leaders & Prefects</h4>
-                    <p class="text-xs text-stone-600">Guiding parents through awareness booths, peer mentorship, and reporting channels.</p>
+                    <h4 class="text-xs sm:text-sm font-bold text-[#7A1C2E] uppercase">School Counsellor & Safeguarding Lead</h4>
+                    <p class="text-xs text-stone-600">Contact for emotional wellbeing, mental health support, and safeguarding procedures.</p>
                 </div>
             </div>
             <button onclick="toggleDirectory(false)" class="w-full py-3 bg-[#7A1C2E] hover:bg-[#611222] text-white text-xs sm:text-sm font-semibold rounded-xl transition">Close Directory</button>
