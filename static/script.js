@@ -1,6 +1,5 @@
 let scenarios = [];
 let userAnswers = {};
-let score = 0;
 let activeScenarioId = null;
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -13,21 +12,31 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function switchTab(tab) {
-    const infoSec = document.getElementById("sectionInfo");
+    const mentalHealthSec = document.getElementById("sectionMentalHealth");
+    const safeguardingSec = document.getElementById("sectionSafeguarding");
     const scenariosSec = document.getElementById("sectionScenarios");
-    const infoBtn = document.getElementById("tabInfoBtn");
+    
+    const mentalHealthBtn = document.getElementById("tabMentalHealthBtn");
+    const safeguardingBtn = document.getElementById("tabSafeguardingBtn");
     const scenariosBtn = document.getElementById("tabScenariosBtn");
 
-    if (tab === 'info') {
-        infoSec.classList.remove("hidden");
-        scenariosSec.classList.add("hidden");
-        infoBtn.className = "py-3.5 px-4 font-bold text-sm sm:text-base border-b-2 border-[#7A1C2E] text-[#7A1C2E] transition flex items-center gap-2";
-        scenariosBtn.className = "py-3.5 px-4 font-semibold text-sm sm:text-base border-b-2 border-transparent text-stone-500 hover:text-[#7A1C2E] transition flex items-center gap-2";
-    } else {
-        infoSec.classList.add("hidden");
+    mentalHealthSec.classList.add("hidden");
+    safeguardingSec.classList.add("hidden");
+    scenariosSec.classList.add("hidden");
+
+    mentalHealthBtn.className = "py-3.5 px-3 font-semibold text-sm sm:text-base border-b-2 border-transparent text-stone-500 hover:text-[#7A1C2E] transition flex items-center gap-2";
+    safeguardingBtn.className = "py-3.5 px-3 font-semibold text-sm sm:text-base border-b-2 border-transparent text-stone-500 hover:text-[#7A1C2E] transition flex items-center gap-2";
+    scenariosBtn.className = "py-3.5 px-3 font-semibold text-sm sm:text-base border-b-2 border-transparent text-stone-500 hover:text-[#7A1C2E] transition flex items-center gap-2";
+
+    if (tab === 'mentalHealth') {
+        mentalHealthSec.classList.remove("hidden");
+        mentalHealthBtn.className = "py-3.5 px-3 font-bold text-sm sm:text-base border-b-2 border-[#7A1C2E] text-[#7A1C2E] transition flex items-center gap-2";
+    } else if (tab === 'safeguarding') {
+        safeguardingSec.classList.remove("hidden");
+        safeguardingBtn.className = "py-3.5 px-3 font-bold text-sm sm:text-base border-b-2 border-[#7A1C2E] text-[#7A1C2E] transition flex items-center gap-2";
+    } else if (tab === 'scenarios') {
         scenariosSec.classList.remove("hidden");
-        scenariosBtn.className = "py-3.5 px-4 font-bold text-sm sm:text-base border-b-2 border-[#7A1C2E] text-[#7A1C2E] transition flex items-center gap-2";
-        infoBtn.className = "py-3.5 px-4 font-semibold text-sm sm:text-base border-b-2 border-transparent text-stone-500 hover:text-[#7A1C2E] transition flex items-center gap-2";
+        scenariosBtn.className = "py-3.5 px-3 font-bold text-sm sm:text-base border-b-2 border-[#7A1C2E] text-[#7A1C2E] transition flex items-center gap-2";
     }
 }
 
@@ -38,11 +47,9 @@ function renderCardsGrid() {
         const cardNum = titleParts[0];
         const cardTitle = titleParts[1] ? titleParts[1].trim() : s.card;
         const isAnswered = userAnswers[s.id] !== undefined;
-        const selectedKey = userAnswers[s.id];
-        const isCorrect = selectedKey === s.correct;
 
         return `
-            <div onclick="openModal(${s.id})" class="bg-white rounded-3xl p-6 sm:p-7 shadow-sm border border-stone-200/90 hover:border-[#7A1C2E]/40 hover:shadow-md transition cursor-pointer flex flex-col justify-between gap-5 group">
+            <div onclick="openModal(${s.id})" class="bg-white rounded-3xl p-6 sm:p-7 shadow-sm border border-stone-200/95 hover:border-[#7A1C2E]/40 hover:shadow-md transition cursor-pointer flex flex-col justify-between gap-5 group">
                 <div class="space-y-3">
                     <div class="flex items-center justify-between border-b border-stone-100 pb-3">
                         <span class="px-3 py-1 rounded-lg bg-[#7A1C2E]/10 text-[#7A1C2E] text-xs font-bold uppercase tracking-wider">${cardNum}</span>
@@ -56,8 +63,8 @@ function renderCardsGrid() {
                 </div>
 
                 <div class="pt-3 border-t border-stone-100 flex items-center justify-between">
-                    <span class="text-xs font-semibold ${isAnswered ? (isCorrect ? 'text-emerald-700' : 'text-amber-700') : 'text-stone-400'}">
-                        ${isAnswered ? (isCorrect ? '✅ Solved Correctly' : '⚠️ Answered') : 'Click to View Scenario ➔'}
+                    <span class="text-xs font-semibold ${isAnswered ? 'text-emerald-700' : 'text-stone-400'}">
+                        ${isAnswered ? 'Completed' : 'Click to View Scenario ➔'}
                     </span>
                     <span class="w-8 h-8 rounded-full bg-stone-50 group-hover:bg-[#7A1C2E] group-hover:text-white text-stone-600 flex items-center justify-center text-xs font-bold transition">
                         🔍
@@ -125,7 +132,7 @@ function renderModalOptions() {
         expBox.className = `p-5 rounded-2xl border text-sm space-y-2 animate-fadeIn ${isCorrect ? 'bg-emerald-50 border-emerald-200 text-emerald-900' : 'bg-amber-50 border-amber-200 text-amber-900'}`;
         expBox.innerHTML = `
             <p class="font-bold flex items-center gap-1.5 text-base">
-                ${isCorrect ? '✅ Correct Choice! Well Done.' : '⚠️ Not quite. The correct answer is highlighted above.'}
+                ${isCorrect ? 'Correct Choice! Well Done.' : 'The correct answer is highlighted above.'}
             </p>
             <p class="leading-relaxed text-stone-700"><strong>Recommended Guidance:</strong> ${s.explanation}</p>
         `;
@@ -138,13 +145,6 @@ function handleModalAnswer(optionKey) {
     if (userAnswers[activeScenarioId] !== undefined) return;
 
     userAnswers[activeScenarioId] = optionKey;
-    const s = scenarios.find(item => item.id === activeScenarioId);
-
-    if (optionKey === s.correct) {
-        score++;
-        document.getElementById("scoreBadge").innerText = `${score}/10`;
-    }
-
     renderModalOptions();
     renderCardsGrid();
 }
@@ -152,13 +152,6 @@ function handleModalAnswer(optionKey) {
 function closeModal() {
     document.getElementById("scenarioModal").classList.add("hidden");
     activeScenarioId = null;
-}
-
-function resetProgress() {
-    userAnswers = {};
-    score = 0;
-    document.getElementById("scoreBadge").innerText = `0/10`;
-    renderCardsGrid();
 }
 
 function toggleDirectory(show) {
