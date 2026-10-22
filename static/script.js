@@ -155,8 +155,13 @@ function handleModalAnswer(optionKey) {
 }
 
 function closeModal() {
+    if (activeScenarioId !== null) {
+        delete userAnswers[activeScenarioId];
+    }
+    
     document.getElementById("scenarioModal").classList.add("hidden");
     activeScenarioId = null;
+    renderCardsGrid();
 }
 
 function toggleDirectory(show) {
