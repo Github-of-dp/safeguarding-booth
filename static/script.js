@@ -41,6 +41,8 @@ function switchTab(tab) {
         scenariosSec.classList.remove("hidden");
         scenariosBtn.className = activeStyle;
     }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function renderCardsGrid() {
