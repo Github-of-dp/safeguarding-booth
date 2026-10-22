@@ -24,19 +24,22 @@ function switchTab(tab) {
     safeguardingSec.classList.add("hidden");
     scenariosSec.classList.add("hidden");
 
-    mentalHealthBtn.className = "py-3.5 px-3 font-semibold text-sm sm:text-base border-b-2 border-transparent text-stone-500 hover:text-[#7A1C2E] transition flex items-center gap-2";
-    safeguardingBtn.className = "py-3.5 px-3 font-semibold text-sm sm:text-base border-b-2 border-transparent text-stone-500 hover:text-[#7A1C2E] transition flex items-center gap-2";
-    scenariosBtn.className = "py-3.5 px-3 font-semibold text-sm sm:text-base border-b-2 border-transparent text-stone-500 hover:text-[#7A1C2E] transition flex items-center gap-2";
+    const inactiveStyle = "py-3 px-5 rounded-2xl font-semibold text-sm sm:text-base bg-stone-100 text-stone-700 hover:bg-stone-200 transition flex items-center gap-2 cursor-pointer border border-stone-200";
+    const activeStyle = "py-3 px-5 rounded-2xl font-bold text-sm sm:text-base bg-[#7A1C2E] text-white shadow-md transition flex items-center gap-2 cursor-pointer";
+
+    mentalHealthBtn.className = inactiveStyle;
+    safeguardingBtn.className = inactiveStyle;
+    scenariosBtn.className = inactiveStyle;
 
     if (tab === 'mentalHealth') {
         mentalHealthSec.classList.remove("hidden");
-        mentalHealthBtn.className = "py-3.5 px-3 font-bold text-sm sm:text-base border-b-2 border-[#7A1C2E] text-[#7A1C2E] transition flex items-center gap-2";
+        mentalHealthBtn.className = activeStyle;
     } else if (tab === 'safeguarding') {
         safeguardingSec.classList.remove("hidden");
-        safeguardingBtn.className = "py-3.5 px-3 font-bold text-sm sm:text-base border-b-2 border-[#7A1C2E] text-[#7A1C2E] transition flex items-center gap-2";
+        safeguardingBtn.className = activeStyle;
     } else if (tab === 'scenarios') {
         scenariosSec.classList.remove("hidden");
-        scenariosBtn.className = "py-3.5 px-3 font-bold text-sm sm:text-base border-b-2 border-[#7A1C2E] text-[#7A1C2E] transition flex items-center gap-2";
+        scenariosBtn.className = activeStyle;
     }
 }
 
